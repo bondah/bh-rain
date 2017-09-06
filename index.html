@@ -3,8 +3,10 @@
   <head>
     <title>BH Rainfall</title>
     <meta charset="UTF-8">
+    <link type="text/css" href="css/leaflet.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/dc.css"/>
+  	<link type="text/css" href="css/leaflet-legend.css" rel="stylesheet"/>
     <style>
       dl {
         margin-left: 2em;
@@ -20,6 +22,9 @@
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
+      }
+      #map {
+        height: 400px;
       }
     </style>
   </head>
@@ -44,11 +49,14 @@
               </h4><br>
               <div class="row">
                 <br>
-                <div id="rain-chart" style="min-height: 500px"></div>
-                <div id="gauge-map"></div>
+                <div class='col-xs-8'>
+                    <div id="rain-chart" style="min-height: 500px"></div>
+                </div>
+                <div class='col-xs-4'>
+                    <div id="map"></div>
+                </div>
               </div>
             </div>
-            <div class='row'>
             <hr/>
           	<div class='data-table span12'>
                 <h4 style="display:inline">Data Table</h4>
@@ -72,7 +80,6 @@
       <script src='js/bootstrap.min.js' type='text/javascript'></script>
       <script type="text/javascript" src="js/dc.js"></script>
       <script type="text/javascript" src="js/leaflet.js"></script>
-      <script type="text/javascript" src="js/dc.leaflet.js"></script>
       <script type="text/javascript">
 
       window.onload = update;
@@ -198,25 +205,6 @@
             table
                 .width(768);
 
-                // map
-                function drawMarkerArea(data) {
-                    var groupname = "marker-area";
-                    var facilities = ndx.dimension(function(d) { return d.id; });
-                    var facilitiesGroup = facilities.group().reduceCount();
-                    var marker = dc_leaflet.markerChart("#gauge-map",groupname)
-                        .dimension(facilities)
-                        .group(facilitiesGroup)
-                        .width(600)
-                        .height(400)
-                        .center([42.69,25.42])
-                        .zoom(7)
-                        .renderPopup(false)
-                        .filterByArea(true);
-
-                    dc.renderAll(groupname);
-                    return {marker: marker};
-                }
-
             // this demonstrates solving elasticX manually, avoiding the
             // bug where the rightmost bar/box is not displayed, #792
             function calc_domain(chart) {
@@ -255,8 +243,17 @@
         });
       };
 
-
-
+      // map
+      var map = L.map('map').setView([34.08, -118.37], 11);
+      var OpenStreetMap_Mapnik = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }).addTo(map);
+      var g323 = L.marker([34.0864, -118.4458]).bindPopup('Gage 323'),
+          g403    = L.marker([34.04833, -118.40167]).bindPopup('Gage 403'),
+          g312    = L.marker([34.118, -118.333]).bindPopup('Gage 312'),
+          g310    = L.marker([34.0873, -118.2921]).bindPopup('Gage 310');
+      var gages = L.layerGroup([g310,g312,g323,g403]).addTo(map);
       </script>
 
 
