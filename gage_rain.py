@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 
-gages = ["323", "403", "312", "310"]
+gages = ["323", "403", "312", "310", "322"]
 
 for gage in gages:    
     url = "http://www.ladpw.org/wrd/precip/alert_rain/season_raindata.cfm?id=" + gage
