@@ -4,7 +4,7 @@ import csv
 
 gages = ["323", "403", "312", "310", "322"]
 
-for gage in gages:    
+for gage in gages:
     url = "http://www.ladpw.org/wrd/precip/alert_rain/season_raindata.cfm?id=" + gage
     response = requests.get(url)
     code = response.content
@@ -27,7 +27,7 @@ for gage in gages:
         list_of_cells.append(url[-3:])
         list_of_rows.append(list_of_cells)
 
-    csvname = "data/rainfall_" + gage + ".csv"
+    csvname = "data/2018/rainfall_" + gage + ".csv"
     outfile = open(csvname, "w")
     writer = csv.writer(outfile, lineterminator ="\n")
     writer.writerow(headers)
