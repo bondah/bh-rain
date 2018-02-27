@@ -38,11 +38,11 @@
         <div class="row">
               <h4 style="display:inline">Gage
               <select id="gage">
-                <option value ='data/rainfall_310.csv'>310</option>
-                <option value ='data/rainfall_312.csv'>312</option>
-                <option value ='data/rainfall_322.csv'>322</option>
-                <option value ='data/rainfall_323.csv'>323</option>
-                <option selected="selected" value ='data/rainfall_403.csv'>403</option>
+                <option value ='data/2018/rainfall_310.csv'>310</option>
+                <option value ='data/2018/rainfall_312.csv'>312</option>
+                <option value ='data/2018/rainfall_322.csv'>322</option>
+                <option value ='data/2018/rainfall_323.csv'>323</option>
+                <option selected="selected" value ='data/2018/rainfall_403.csv'>403</option>
               </select></h4>
               <h4 style="display:inline">&nbsp;&nbsp;Interval
               <select id="interval"></select>
@@ -128,7 +128,7 @@
                 Weeks: d3.time.week,
                 Months: d3.time.month,
             };
-            var defint = find_query('interval') || 'Days';
+            var defint = find_query('interval') || 'Weeks';
             d3.select('#interval').selectAll('option')
                 .data(Object.keys(intervals))
               .enter().append('option')
