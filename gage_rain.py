@@ -5,7 +5,7 @@ import csv
 gages = ["323", "403", "312", "310", "322"]
 
 for gage in gages:
-    url = "http://www.dpw.lacounty.gov/wrd/Precip/alert_rain/raindata.cfm?id=" + gage
+    url = "http://www.dpw.lacounty.gov/wrd/Precip/alert_rain/season_raindata.cfm?id=" + gage
     response = requests.get(url)
     code = response.content
 
