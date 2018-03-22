@@ -104,6 +104,7 @@
 
     function update() {
         var gage = document.getElementById("gage").value;
+        var gageid = String(gage.slice(-7,-4));
 
         var data = find_query('data') || gage,
             date_col = find_query('date') || 'DateTime',
@@ -141,6 +142,7 @@
                 }
                 var interval = intervals[d3.select('#interval')[0][0].value];
                 var dateDim = ndx.dimension(function(d) {return interval(d[date_col]);});
+
                 chart.xUnits(interval.range);
                 var group = dateDim
                     .group().reduce(
@@ -192,7 +194,9 @@
                     .order(d3.descending)
                     //.transitionDuration(!find_query('unsafe') && group.all().length > 2000 ? 0 : 1000)
                     .render();
+
             }
+
             chart
                 .width(768)
                 .height(420)
@@ -205,6 +209,8 @@
             table
                 .width(768);
 
+
+
             // this demonstrates solving elasticX manually, avoiding the
             // bug where the rightmost bar/box is not displayed, #792
             function calc_domain(chart) {
@@ -213,8 +219,16 @@
                 max = d3.time.month.offset(max, 1);
                 chart.x().domain([min, max]);
             }
-            chart.on('preRender', calc_domain);
-            chart.on('preRedraw', calc_domain);
+
+            function redraw_layers(chart) {
+                map.removeLayer(maplayers[pin]);
+                maplayers[pin].addTo(map);
+            }
+
+            console.log(gageid);
+            chart.on('preRender', calc_domain, map.eachLayer(function (layer) {if (layer != OpenStreetMap_Mapnik){map.removeLayer(layer);}}), maplayers[gageid].addTo(map));
+            chart.on('preRedraw', calc_domain, map.eachLayer(function (layer) {if (layer != OpenStreetMap_Mapnik){map.removeLayer(layer);}}), maplayers[gageid].addTo(map));
+
             var countAll = ndx.groupAll(),
                 groupAll = ndx.groupAll().reduceSum(function(d) { return d[val_col]; });
             counter
@@ -240,6 +254,7 @@
             setup();
 
             dc.renderAll();
+
         });
       };
 
@@ -249,11 +264,12 @@
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
-      var g323 = L.marker([34.0864, -118.4458]).bindPopup('Gage 323'),
-          g403    = L.marker([34.04833, -118.40167]).bindPopup('Gage 403'),
-          g312    = L.marker([34.118, -118.333]).bindPopup('Gage 312'),
-          g310    = L.marker([34.0873, -118.2921]).bindPopup('Gage 310');
-      var gages = L.layerGroup([g310,g312,g323,g403]).addTo(map);
+      var maplayers = [];
+          maplayers["323"] = L.marker([34.0864, -118.4458]).bindPopup('Gage 323'),
+          maplayers["403"] = L.marker([34.04833, -118.40167]).bindPopup('Gage 403'),
+          maplayers["312"] = L.marker([34.118, -118.333]).bindPopup('Gage 312'),
+          maplayers["310"] = L.marker([34.0873, -118.2921]).bindPopup('Gage 310');
+
       </script>
 
 
