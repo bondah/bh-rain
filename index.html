@@ -63,9 +63,8 @@
                 <table class='table table-hover' id='dc-table-graph'>
                   <thead>
                     <tr class='header'>
-                      <th>Hour</th>
-                      <th>Amount (inches)</th>
-                      <th>Gage</th>
+                      <th>Start of Time Period</th>
+                      <th>Total Amount (inches)</th>
                     </tr>
                   </thead>
                 </table>
@@ -179,20 +178,18 @@
                     });
                 }
                 chart.dimension(dateDim).group(group)
-                    .transitionDuration(!find_query('unsafe') && group.all().length > 2000 ? 0 : 1000)
                     .render();
 
 
-                table.dimension(dateDim)
+                table.dimension(group)
                     .group(function (p) { return "" })
+                    .size(Infinity)
                     .columns([
-                      function (d) { return d.DateTime},
-                      function (d) { return d.Amount},
-                      function (d) { return d.id}
+                      function (d) { return d.key},
+                      function (d) {return Number(d.value.total).toFixed(3)}
                     ]).sortBy(function(d) {
-                      return +d.DateTime;})
+                      return d.value.total;})
                     .order(d3.descending)
-                    //.transitionDuration(!find_query('unsafe') && group.all().length > 2000 ? 0 : 1000)
                     .render();
 
             }
@@ -202,6 +199,7 @@
                 .height(420)
                 .x(d3.time.scale())
                 .xUnits(d3.time.days)
+                .brushOn(false)
                 .margins({left: 50, top: 5, right: 5, bottom: 20})
                 .elasticY(true)
                 .clipPadding(10);
